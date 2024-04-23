@@ -63,7 +63,7 @@ import java.awt.*;
 
         public void bounce() {
 
-            if (isSouth == false && isSouth == false) {
+            if (isSouth == false && isNorth == false) {
 
                 dy = 0;
             } else if (isNorth) {

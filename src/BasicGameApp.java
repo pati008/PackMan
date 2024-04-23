@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
+import java.sql.SQLOutput;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -158,7 +159,7 @@ public class BasicGameApp implements Runnable, KeyListener {
 	public void moveThings() {
 		//calls the move( ) code in the objects
 		shark.wrap();
-		bob.wrap();
+		bob.bounce();
 
 
 
@@ -203,35 +204,38 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 		if (bob.rec.intersects(shark.rec) == false) {
 			bob.isCrashing = false;
-			bob.isAlive=true;
+			//bob.isAlive=true;
 
 		}
 
 		if (bob.rec.intersects(hook.rec) == false) {
 			bob.isCrashing = false;
-			bob.isAlive=true;
+			//bob.isAlive=true;
 
 		}
 
-		if (bob.rec.intersects(shark.rec) && bob.isCrashing == true) {
+
+
+
+		if (bob.rec.intersects(shark.rec) && bob.isCrashing == false &&bob.isAlive == true) {
+			bob.isAlive=false;
+			System.out.println("shark crash");
+			bob.isCrashing = true;
+
+		}
+
+		if (bob.rec.intersects(hook.rec) && bob.isCrashing == false && bob.isAlive) {
+			bob.isCrashing=true;
 			bob.isAlive=false;
 
 		}
 
-		if (bob.rec.intersects(hook.rec) && bob.isCrashing == true) {
-			bob.isAlive=false;
-
-		}
-
-		if (bob.rec.intersects(food.rec) && bob.isCrashing == true) {
+		if (bob.rec.intersects(food.rec) && bob.isCrashing == false && food.isAlive) {
 			food.isAlive=false;
+			bob.isCrashing=true;
 
 		}
 
-		if (bob.rec.intersects(food.rec) && bob.isCrashing == false) {
-			food.isAlive=true;
-
-		}
 
 
 
@@ -351,10 +355,14 @@ public class BasicGameApp implements Runnable, KeyListener {
 //        //draw the image of the astronaut
 		if(bob.isAlive==true){
 			g.drawImage(bobPic, bob.xpos,bob.ypos, bob.width, bob.height, null);
+
+
 		}
 
 		if(shark.isAlive==true){
 			g.drawImage(sharkPic, shark.xpos,shark.ypos,shark.width, shark.height, null);
+
+
 		}
 
 		if(hook.isAlive==true){
@@ -396,14 +404,14 @@ public class BasicGameApp implements Runnable, KeyListener {
 			bob.isSouth =true;
 		}
 
-		if(e.getKeyCode()==37){
-			System.out.println("going right");
-			bob.isEast = true;
-		}
-
 		if(e.getKeyCode()==39){
 			System.out.println("going left");
 			bob.isWest = true;
+		}
+
+		if(e.getKeyCode()==37){
+			System.out.println("going right");
+			bob.isEast = true;
 		}
 
 	}
@@ -416,19 +424,19 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 		}
 
-		if(e.getKeyCode()==37) {
+		if(e.getKeyCode()==39) {
 			System.out.println("going left");
 			bob.isWest = false;
 
 		}
 
-		if(e.getKeyCode()==39) {
+		if(e.getKeyCode()==37) {
 			System.out.println("going right");
 			bob.isEast = false;
 
 		}
 
-		if(e.getKeyCode()==48) {
+		if(e.getKeyCode()==40) {
 			System.out.println("going down");
 			bob.isSouth = false;
 
