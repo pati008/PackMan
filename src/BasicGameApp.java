@@ -43,21 +43,32 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 
 	public Image skyBack;
+	public Image bobPic;
 
 	public Image sharkPic;
+
 	public Image hookPic;
-	public Image fishPic;
+
+
+	public Image bubblesPic;
+
+	public Image foodPic;
 
 
 
-
-	//Declare the objects used in the program
-	//These are things that are made up of more than one variable type
-	public object shark;
-	public object hook;
-	public object fish;
+	public butterfly[] fliers = new butterfly[50];
 
 
+
+	private fish bob;
+
+	private butterfly bubbles;
+
+	private hook hook;
+
+	private shark shark;
+
+	private butterfly food;
 
 
 
@@ -84,20 +95,37 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 		//variable and objects
 		//create (construct) the objects needed for the game and load up
-		sharkPic = Toolkit.getDefaultToolkit().getImage("1653815_nicolashdm_cartoon-bad-shark.png"); //load the picture
-		shark= new object((int)(Math.random()*940),(int)(Math.random()*640));
+
+
+		bubblesPic = Toolkit.getDefaultToolkit().getImage("bubbles.png"); //load the picture
+		bubbles= new butterfly((int)(Math.random()*940),(int)(Math.random()*640));
+		bubbles.isAlive=true;
+
+		sharkPic = Toolkit.getDefaultToolkit().getImage("shark.png"); //load the picture
+		shark= new shark((int)(Math.random()*940),(int)(Math.random()*640));
 		shark.isAlive=true;
 
-		hookPic = Toolkit.getDefaultToolkit().getImage("close-shot-fish-hook-260nw-201623081.jpg.webp"); //load the picture
-		hook= new object((int)(Math.random()*940),(int)(Math.random()*640));
+		foodPic = Toolkit.getDefaultToolkit().getImage("pebbles.png"); //load the picture
+		food= new butterfly((int)(Math.random()*940),(int)(Math.random()*640));
+		food.isAlive=true;
+
+		hookPic = Toolkit.getDefaultToolkit().getImage("hook.png"); //load the picture
+		hook= new hook((int)(Math.random()*940),(int)(12));
 		hook.isAlive=true;
 
-		fishPic = Toolkit.getDefaultToolkit().getImage("1170755.png"); //load the picture
-		fish= new object((int)(Math.random()*940),(int)(Math.random()*640));
-		fish.isAlive=true;
+		bobPic= Toolkit.getDefaultToolkit().getImage("bob.png");
+		bob= new fish((int)(Math.random()*940),(int)(Math.random()*640));
+		bob.isAlive=true;
 
-		skyBack = Toolkit.getDefaultToolkit().getImage("360_F_491416712_G9DM8xEaCyVfBo55FSBRKOIckSUXfeij.jpg"); //load the picture
 
+		skyBack = Toolkit.getDefaultToolkit().getImage("background.jpg"); //load the picture
+
+
+
+
+		for(int z=0; z<fliers.length; z++){
+			fliers[z]=new butterfly((int)(Math.random()*940),(int)(Math.random()*640));
+		}
 
 
 
@@ -130,7 +158,23 @@ public class BasicGameApp implements Runnable, KeyListener {
 	public void moveThings() {
 		//calls the move( ) code in the objects
 		shark.wrap();
+		bob.wrap();
 
+
+
+		hook.dx=3;
+		hook.dy=0;
+		hook.wrap();
+
+
+
+
+
+
+
+		hook.isAlive=true;
+		shark.isAlive=true;
+		bubbles.isAlive=true;
 
 
 
@@ -140,35 +184,58 @@ public class BasicGameApp implements Runnable, KeyListener {
 		}
 
 		for(int x=0; x<fliers.length;x++) {
-			if (fliers[x].rec.intersects(caterpillar.rec) && fliers[x].isCrashing == false) {
-				caterpillar.height=10+caterpillar.height;
-				caterpillar.width=10+caterpillar.width;
+			if (fliers[x].rec.intersects(bob.rec) && fliers[x].isCrashing == false) {
+				//System.out.println("hi! !");
 
 
 
-				if (caterpillar.rec.intersects(water.rec) && water.isCrashing == false) {
 
-					cocoon.isAlive = true;
-					water.isCrashing = true;
-					caterpillar.isAlive = false;
-
-					//butters.height = butters.height + 50;
-					//butters.width = butters.width + 50;
-					//  butters.isCrashing = true;
-
-
-					System.out.println("Crash");
-				}
 			}
 		}
 
 		for(int z=0;z<fliers.length;z++){
 			for(int y=z+1;y<fliers.length; y++){
 				if(fliers[z].rec.intersects(fliers[y].rec)&&fliers[z].isCrashing==false){
-					System.out.println("fliers crashing!");
+					//System.out.println("fliers !");
 				}
 			}
 		}
+
+		if (bob.rec.intersects(shark.rec) == false) {
+			bob.isCrashing = false;
+			bob.isAlive=true;
+
+		}
+
+		if (bob.rec.intersects(hook.rec) == false) {
+			bob.isCrashing = false;
+			bob.isAlive=true;
+
+		}
+
+		if (bob.rec.intersects(shark.rec) && bob.isCrashing == true) {
+			bob.isAlive=false;
+
+		}
+
+		if (bob.rec.intersects(hook.rec) && bob.isCrashing == true) {
+			bob.isAlive=false;
+
+		}
+
+		if (bob.rec.intersects(food.rec) && bob.isCrashing == true) {
+			food.isAlive=false;
+
+		}
+
+		if (bob.rec.intersects(food.rec) && bob.isCrashing == false) {
+			food.isAlive=true;
+
+		}
+
+
+
+
 //
 		//}
 		//...
@@ -222,89 +289,19 @@ public class BasicGameApp implements Runnable, KeyListener {
 //
 		//}
 
-		if (caterpillar.rec.intersects(water.rec) == false) {
-			water.isCrashing = false;
-
-		}
-		if (cocoon.rec.intersects(time.rec) && cocoon.isCrashing == false) {
-
-			butters.isAlive = true;
-			cocoon.isCrashing = true;
-			cocoon.isAlive = false;
-			water.isAlive = false;
-			time.isAlive = false;
-
-			//butters.height = butters.height + 50;
-			//butters.width = butters.width + 50;
-			//  butters.isCrashing = true;
 
 
-			System.out.println("Crash");
-//.
-			//}
-			//...
-//
-//       // if(astro.rec.intersects(astro2.rec)==false){
-//
-//         //   astro.isCrashing=false;
-//       // }
-//     //   if(astro.rec.intersects(astro3.rec) && astro.isCrashing==false){
-//
-//
-//
-//          //  astro3.height=astro3.height-5;
-//        //    astro3.width=astro3.width-5;
-//         //   astro3.isCrashing=true;
-//
-//
-////            System.out.println("Crash");
-////
-////        }
-////
-////        if(astro.rec.intersects(astro3.rec)==false){
-////
-////            astro.isCrashing=false;
-////        }
-//
-////        if(astro2.rec.intersects(astro3.rec) && astro.isCrashing==false){
-////
-////
-////
-////            astro2.intersect();
-////            astro3.intersect();
-////            astro3.isCrashing=true;
-//
-//
-//            System.out.println("Crash");
-//
-////        }
-////
-////        if(astro2.rec.intersects(astro3.rec)==false){
-////
-////            astro2.isCrashing=false;
-////        }
-//
-//
-//
-//
-//    }
-//
-//
-//
-		}
 
-		if (cocoon.rec.intersects(time.rec)) {
-			cocoon.isCrashing = false;
-		}
+
 
 
 	}
 
 	//    //Pauses or sleeps the computer for the amount specified in milliseconds
-	public void pause(int time){
+	public void pause(int bob){
 		//sleep
 		try {
-			Thread.sleep(time);
+			Thread.sleep(bob);
 		} catch (InterruptedException e) {
 
 		}
@@ -352,24 +349,24 @@ public class BasicGameApp implements Runnable, KeyListener {
 		g.drawImage(skyBack, 0, 0, WIDTH, HEIGHT,  null);
 //
 //        //draw the image of the astronaut
-		if(butters.isAlive==true){
-			g.drawImage(buttersPic, butters.xpos, butters.ypos, butters.width, butters.height, null);
-		back
-		if(cocoon.isAlive==true){
-			g.drawImage(cocoonPic, cocoon.xpos, cocoon.ypos, cocoon.width, cocoon.height, null);
+		if(bob.isAlive==true){
+			g.drawImage(bobPic, bob.xpos,bob.ypos, bob.width, bob.height, null);
 		}
-		if(caterpillar.isAlive==true){
-			g.drawImage(caterpillarPic, caterpillar.xpos, caterpillar.ypos, caterpillar.width, caterpillar.height, null);
+
+		if(shark.isAlive==true){
+			g.drawImage(sharkPic, shark.xpos,shark.ypos,shark.width, shark.height, null);
 		}
-		if(water.isAlive==true){
-			g.drawImage(waterPic, water.xpos, water.ypos, water.width, water.height, null);
+
+		if(hook.isAlive==true){
+			g.drawImage(hookPic, hook.xpos,hook.ypos,hook.width, hook.height, null);
 		}
-		if(time.isAlive==true){
-			g.drawImage(timePic, time.xpos,time.ypos, time.width, time.height, null);
+
+		if(food.isAlive==true){
+			g.drawImage(foodPic, food.xpos,food.ypos,food.width, food.height, null);
 		}
 
 		for(int x=0;x<fliers.length;x++){
-			g.drawImage(buttersPic, fliers[x].xpos, fliers[x].ypos, fliers[x].width, fliers[x].height, null);
+			g.drawImage(bubblesPic, fliers[x].xpos, fliers[x].ypos, fliers[x].width, fliers[x].height, null);
 		}
 
 
@@ -390,23 +387,23 @@ public class BasicGameApp implements Runnable, KeyListener {
 		System.out.println(e.getKeyCode());
 		if(e.getKeyCode()==38){
 			System.out.println("going up");
-			time.isNorth=true;
+			bob.isNorth=true;
 
 		}
 
 		if(e.getKeyCode()==40){
 			System.out.println("going down");
-			time.isSouth =true;
+			bob.isSouth =true;
 		}
 
 		if(e.getKeyCode()==37){
 			System.out.println("going right");
-			time.isEast = true;
+			bob.isEast = true;
 		}
 
 		if(e.getKeyCode()==39){
 			System.out.println("going left");
-			time.isWest = true;
+			bob.isWest = true;
 		}
 
 	}
@@ -415,25 +412,25 @@ public class BasicGameApp implements Runnable, KeyListener {
 	public void keyReleased(KeyEvent e) {
 		if(e.getKeyCode()==38) {
 			System.out.println("going up");
-			time.isNorth = false;
+			bob.isNorth = false;
 
 		}
 
 		if(e.getKeyCode()==37) {
 			System.out.println("going left");
-			time.isWest = false;
+			bob.isWest = false;
 
 		}
 
 		if(e.getKeyCode()==39) {
 			System.out.println("going right");
-			time.isEast = false;
+			bob.isEast = false;
 
 		}
 
 		if(e.getKeyCode()==48) {
 			System.out.println("going down");
-			time.isSouth = false;
+			bob.isSouth = false;
 
 		}
 

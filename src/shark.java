@@ -3,7 +3,7 @@ import java.awt.*;
 /**
  * Created by chales on 11/6/2017.
  */
-public class object {
+public class shark {
 
     //VARIABLE DECLARATION SECTION
     //Here's where you state which variables you are going to use.
@@ -36,7 +36,7 @@ public class object {
 
     //This is a SECOND constructor that takes 3 parameters.  This allows us to specify the hero's name and position when we build it.
     // if you put in a String, an int and an int the program will use this constructor instead of the one above.
-    public object(int pXpos, int pYpos) {
+    public shark(int pXpos, int pYpos) {
         xpos = pXpos;
         ypos = pYpos;
         dx =5;
@@ -101,39 +101,6 @@ public class object {
         rec= new Rectangle(xpos,ypos, width, height);
     }
     public void wrap(){
-
-        if(isNorth==true){
-            dy=-4;
-        }
-
-        if(isNorth==false){
-            dy=0;
-        }
-
-        if(isSouth==true){
-            dy=+4;
-        }
-
-        if(isSouth==false){
-            dy=0;
-        }
-
-        if(isEast==true){
-            dy=0;
-        }
-
-        if(isEast==false){
-            dy=-4;
-        }
-
-        if(isWest==true){
-            dy=0;
-        }
-
-        if(isWest==false){
-            dy=4;
-        }
-
 
         if (xpos<0){
             xpos=1000-width;
